@@ -149,5 +149,10 @@ namespace Com.MyCompany.MyGame
                 PhotonNetwork.LoadLevel("Room for 1");
             }
         }
+
+        public void ExitGame()
+        {
+            Application.Quit();
+        }
     }
 }
