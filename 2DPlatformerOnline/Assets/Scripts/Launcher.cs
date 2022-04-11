@@ -141,12 +141,12 @@ namespace Com.MyCompany.MyGame
 
             if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
             {
-                Debug.Log("We load the 'Room for 3' ");
+                Debug.Log("We load the 'Room for 1' ");
 
 
                 // #Critical
                 // Load the Room Level.
-                PhotonNetwork.LoadLevel("Room for 3");
+                PhotonNetwork.LoadLevel("Room for 1");
             }
         }
     }
