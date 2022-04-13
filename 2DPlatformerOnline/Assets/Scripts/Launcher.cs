@@ -5,7 +5,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
 using System.Collections.Generic;
-
+using System.Linq;
 
 namespace Com.MyCompany.MyGame
 {
@@ -38,6 +38,13 @@ namespace Com.MyCompany.MyGame
 
         [SerializeField]
         GameObject roomListItemPrefab;
+
+
+        [SerializeField]
+        Transform playerListContent;
+
+        [SerializeField]
+        GameObject playerListItemPrefab;
 
         #endregion
 
@@ -95,6 +102,7 @@ namespace Com.MyCompany.MyGame
         {
             MenuManager.Instance.OpenMenu("Title");
             Debug.Log("Joined Lobby");
+            PhotonNetwork.NickName = "Player " + UnityEngine.Random.Range(0, 100).ToString("000");
         }
 
         public void CreateRoom()
@@ -112,6 +120,13 @@ namespace Com.MyCompany.MyGame
         {
             MenuManager.Instance.OpenMenu("Room");
             roomNameText.text = PhotonNetwork.CurrentRoom.Name;
+
+            Player[] players = PhotonNetwork.PlayerList;
+
+            for (int i = 0; i < players.Count(); i++)
+            {
+                Instantiate(playerListItemPrefab, playerListContent).GetComponent<PlayerListItem>().SetUp(players[i]);
+            }
         }
 
         public override void OnCreateRoomFailed(short returnCode, string message)
@@ -130,6 +145,7 @@ namespace Com.MyCompany.MyGame
         {
             PhotonNetwork.JoinRoom(info.Name);
             MenuManager.Instance.OpenMenu("Loading");
+
         }
 
         public override void OnLeftRoom()
@@ -149,6 +165,16 @@ namespace Com.MyCompany.MyGame
             {
                 Instantiate(roomListItemPrefab, roomListContent).GetComponent<RoomListItem>().SetUp(roomList[i]);
             }
+        }
+
+        public override void OnPlayerEnteredRoom(Player newPlayer)
+        {
+            Instantiate(playerListItemPrefab, playerListContent).GetComponent<PlayerListItem>().SetUp(newPlayer);
+        }
+
+        public void ExitGame()
+        {
+            Application.Quit();
         }
     }
 }
@@ -237,10 +263,7 @@ namespace Com.MyCompany.MyGame
             }
         }
 
-        public void ExitGame()
-        {
-            Application.Quit();
-        }
+     
     }
 }
 */
