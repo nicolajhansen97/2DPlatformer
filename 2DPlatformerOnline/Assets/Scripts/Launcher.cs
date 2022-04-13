@@ -46,6 +46,10 @@ namespace Com.MyCompany.MyGame
         [SerializeField]
         GameObject playerListItemPrefab;
 
+
+        [SerializeField]
+        GameObject startGameButton;
+
         #endregion
 
 
@@ -75,10 +79,6 @@ namespace Com.MyCompany.MyGame
 
         void Awake()
         {
-            // #Critical
-            // this makes sure we can use PhotonNetwork.LoadLevel() on the master client and all clients in the same room sync their level automatically
-            //PhotonNetwork.AutomaticallySyncScene = true;
-
             Instance = this;
         }
 
@@ -96,6 +96,9 @@ namespace Com.MyCompany.MyGame
         {
             Debug.Log("Connected to Master");
             PhotonNetwork.JoinLobby();
+
+            // this makes sure we can use PhotonNetwork.LoadLevel() on the master client and all clients in the same room sync their level automatically
+            PhotonNetwork.AutomaticallySyncScene = true;
         }
 
         public override void OnJoinedLobby()
@@ -127,6 +130,15 @@ namespace Com.MyCompany.MyGame
             {
                 Instantiate(playerListItemPrefab, playerListContent).GetComponent<PlayerListItem>().SetUp(players[i]);
             }
+
+            //Only the host of the game will be able to start the game.
+            startGameButton.SetActive(PhotonNetwork.IsMasterClient);
+        }
+
+        //Automatic host switch in Photon, this will give a new player the host role.
+        public override void OnMasterClientSwitched(Player newMasterClient)
+        {
+            startGameButton.SetActive(PhotonNetwork.IsMasterClient);
         }
 
         public override void OnCreateRoomFailed(short returnCode, string message)
@@ -175,6 +187,11 @@ namespace Com.MyCompany.MyGame
         public void ExitGame()
         {
             Application.Quit();
+        }
+
+        public void StartGame()
+        {
+            PhotonNetwork.LoadLevel(1);
         }
     }
 }
