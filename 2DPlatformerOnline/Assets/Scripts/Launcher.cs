@@ -11,6 +11,10 @@ namespace Com.MyCompany.MyGame
 {
     public class Launcher : MonoBehaviourPunCallbacks
     {
+
+
+        public static Launcher Instance;
+
         #region Private Serializable Fields
 
         /// <summary>
@@ -61,15 +65,15 @@ namespace Com.MyCompany.MyGame
         /// <summary>
         /// MonoBehaviour method called on GameObject by Unity during early initialization phase.
         /// </summary>
-       /*
+
         void Awake()
         {
             // #Critical
             // this makes sure we can use PhotonNetwork.LoadLevel() on the master client and all clients in the same room sync their level automatically
-            PhotonNetwork.AutomaticallySyncScene = true;
-        }
+            //PhotonNetwork.AutomaticallySyncScene = true;
 
-        */
+            Instance = this;
+        }
 
 
         /// <summary>
@@ -122,6 +126,12 @@ namespace Com.MyCompany.MyGame
             MenuManager.Instance.OpenMenu("Loading");
         }
 
+        public void JoinRoom(RoomInfo info)
+        {
+            PhotonNetwork.JoinRoom(info.Name);
+            MenuManager.Instance.OpenMenu("Loading");
+        }
+
         public override void OnLeftRoom()
         {
             //SceneManager.LoadScene(0);
@@ -130,9 +140,14 @@ namespace Com.MyCompany.MyGame
 
         public override void OnRoomListUpdate(List<RoomInfo> roomList)
         {
+
+            foreach(Transform trans in roomListContent)
+            {
+                Destroy(trans.gameObject);
+            }
             for (int i = 0; i < roomList.Count; i++)
             {
-                Instantiate(roomListItemPrefab, roomListContent).GetComponent<RoomListItem>().Setup(roomList[i]);
+                Instantiate(roomListItemPrefab, roomListContent).GetComponent<RoomListItem>().SetUp(roomList[i]);
             }
         }
     }
