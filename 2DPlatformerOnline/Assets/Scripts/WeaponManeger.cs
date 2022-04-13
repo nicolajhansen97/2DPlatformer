@@ -39,6 +39,7 @@ public class WeaponManeger : MonoBehaviour
                 guns[currentWeaponIndex].SetActive(false);
                 currentWeaponIndex += 1;
                 guns[currentWeaponIndex].SetActive(true);
+                currentGun = guns[currentWeaponIndex];
             }
         }
 
@@ -50,6 +51,7 @@ public class WeaponManeger : MonoBehaviour
                 guns[currentWeaponIndex].SetActive(false);
                 currentWeaponIndex -= 1;
                 guns[currentWeaponIndex].SetActive(true);
+                currentGun = guns[currentWeaponIndex];
             }
         }
     }
