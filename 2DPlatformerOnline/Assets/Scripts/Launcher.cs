@@ -126,6 +126,12 @@ namespace Com.MyCompany.MyGame
 
             Player[] players = PhotonNetwork.PlayerList;
 
+            //To fix the bug where players arent destroyed if they create a new room.
+            foreach (Transform child in playerListContent)
+            {
+                Destroy(child.gameObject);
+            }
+
             for (int i = 0; i < players.Count(); i++)
             {
                 Instantiate(playerListItemPrefab, playerListContent).GetComponent<PlayerListItem>().SetUp(players[i]);
@@ -175,6 +181,10 @@ namespace Com.MyCompany.MyGame
             }
             for (int i = 0; i < roomList.Count; i++)
             {
+                //Remove from the list ,as Photon not do this automatticly. This check if the room has been removed from the list, then we dont instansiate it again.
+                if (roomList[i].RemovedFromList)
+                    continue;
+
                 Instantiate(roomListItemPrefab, roomListContent).GetComponent<RoomListItem>().SetUp(roomList[i]);
             }
         }

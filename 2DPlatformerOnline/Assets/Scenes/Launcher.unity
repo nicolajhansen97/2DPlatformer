@@ -1496,6 +1496,7 @@ MonoBehaviour:
   roomListItemPrefab: {fileID: 5088457722032504607, guid: 337e60a80059ab24c99cb0b6c957190e, type: 3}
   playerListContent: {fileID: 1007021946}
   playerListItemPrefab: {fileID: 6772355122990880710, guid: 79612030bfca34c4080e6044baee1e2f, type: 3}
+  startGameButton: {fileID: 956785496}
 --- !u!1 &488933444
 GameObject:
   m_ObjectHideFlags: 0
@@ -3490,6 +3491,7 @@ MonoBehaviour:
   roomListItemPrefab: {fileID: 0}
   playerListContent: {fileID: 0}
   playerListItemPrefab: {fileID: 0}
+  startGameButton: {fileID: 0}
 --- !u!4 &1564450449
 Transform:
   m_ObjectHideFlags: 0
@@ -4204,7 +4206,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1981212024
 RectTransform:
   m_ObjectHideFlags: 0
