@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 
 using Photon.Pun;
 using Photon.Realtime;
-
+using System.IO;
 
 namespace Com.MyCompany.MyGame
 {
@@ -16,12 +16,25 @@ namespace Com.MyCompany.MyGame
     {
         #region Public Fields
 
+  
+
         [Tooltip("The prefab to use for representing the player")]
         public GameObject playerPrefab;
 
+
+       
         #endregion
         void Start()
         {
+
+
+            if (PlayerController.LocalPlayerInstance == null)
+            {
+                CreateController();
+            }
+
+
+            /*
             if (playerPrefab == null)
             {
                 Debug.LogError("<Color=Red><a>Missing</a></Color> playerPrefab Reference. Please set it up in GameObject 'Game Manager'", this);
@@ -32,13 +45,24 @@ namespace Com.MyCompany.MyGame
                 {
                     Debug.LogFormat("We are Instantiating LocalPlayer from {0}", Application.loadedLevelName);
                     // we're in a room. spawn a character for the local player. it gets synced by using PhotonNetwork.Instantiate
-                    PhotonNetwork.Instantiate(this.playerPrefab.name, new Vector3(0f, 5f, 0f), Quaternion.identity, 0);
+
+                    
                 }
                 else
                 {
                     Debug.LogFormat("Ignoring scene load for {0}", SceneManagerHelper.ActiveSceneName);
                 }
-            }
+            
+        }
+          */
+        }
+
+        void CreateController()
+        {
+            //Gets our different spawnpoints
+            Transform spawnpoint = SpawnManager.Instance.GetSpawnPoint();
+
+            PhotonNetwork.Instantiate(this.playerPrefab.name, spawnpoint.position, spawnpoint.rotation, 0);
         }
 
         #region Photon Callbacks
@@ -85,12 +109,6 @@ namespace Com.MyCompany.MyGame
         #region Public Methods
 
 
-        public void LeaveRoom()
-        {
-            PhotonNetwork.LeaveRoom();
-        }
-
-
         #endregion
 
         #region Private Methods
@@ -102,8 +120,8 @@ namespace Com.MyCompany.MyGame
             {
                 Debug.LogError("PhotonNetwork : Trying to Load a level but we are not the master Client");
             }
-            Debug.LogFormat("PhotonNetwork : Loading Level : {0}", PhotonNetwork.CurrentRoom.PlayerCount);
-            PhotonNetwork.LoadLevel("Room for " + PhotonNetwork.CurrentRoom.PlayerCount);
+            Debug.LogFormat("PhotonNetwork : Loading Level : 3");
+            PhotonNetwork.LoadLevel("Room for 3");
         }
 
 
