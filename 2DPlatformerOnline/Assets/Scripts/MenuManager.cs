@@ -6,6 +6,8 @@ public class MenuManager : MonoBehaviour
 {
     public static MenuManager Instance;
 
+   //The following part is the main menu
+
     [SerializeField]
     private Menu[] menus;
 
