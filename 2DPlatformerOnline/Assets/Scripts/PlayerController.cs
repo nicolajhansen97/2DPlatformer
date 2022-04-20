@@ -1,9 +1,11 @@
 using Photon.Pun;
+using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
-public class PlayerController : MonoBehaviourPun
+public class PlayerController : MonoBehaviourPunCallbacks
 {
 
     [SerializeField] private LayerMask platformLayerMask;
@@ -33,6 +35,21 @@ public class PlayerController : MonoBehaviourPun
     [Tooltip("The local player instance. Use this to know if the local player is represented in the Scene")]
     public static GameObject LocalPlayerInstance;
 
+
+
+    //NICOLAJ LAVER VÅBEN DEL HERUNDER
+
+    [Header("Weapon Settings")]
+    [SerializeField]
+    Item[] items;
+    int itemIndex;
+    int previousItemIndex = -1;
+
+
+
+
+    //HER SLUTTER NICOLAJS VÅBENDEL
+
     void Awake()
     {
         // #Important
@@ -40,6 +57,7 @@ public class PlayerController : MonoBehaviourPun
         if (photonView.IsMine)
         {
             PlayerController.LocalPlayerInstance = this.gameObject;
+            EquipItem(0);
         }
         // #Critical
         // we flag as don't destroy on load so that instance survives level synchronization, thus giving a seamless experience when levels load.
@@ -72,6 +90,22 @@ public class PlayerController : MonoBehaviourPun
         {
             jumpInputReleased = false;
         }
+
+
+
+        //NICOLAJS VÅBEN DEL
+
+        for (int i = 0; i < items.Length; i++)
+        {
+            if(Input.GetKeyDown((i + 1).ToString()))
+            {
+                EquipItem(i);
+                break;
+            }
+        }
+
+
+        //SLUT NICOLAJS VÅBEN DEL
     }
 
     private void FixedUpdate()
@@ -173,4 +207,53 @@ public class PlayerController : MonoBehaviourPun
         Debug.DrawRay(boxCollider2D.bounds.center - new Vector3(boxCollider2D.bounds.extents.x, boxCollider2D.bounds.extents.y + extraHeightText), Vector2.right * (boxCollider2D.bounds.extents.x * 2), rayColor);
         return raycastHit.collider != null;
     }
+
+
+
+    //NICOLAJ LAVER VÅBEN DEL HERUNDER
+
+  void EquipItem(int _index)
+    {
+        if(_index == previousItemIndex)
+        {
+            return;
+        }
+        itemIndex =_index;
+
+        Debug.Log("Equiped " + itemIndex);
+        items[itemIndex].itemGameObject.SetActive(true);
+
+        if(previousItemIndex != -1)
+        {
+            items[previousItemIndex].itemGameObject.SetActive(false);
+        }
+
+        previousItemIndex = itemIndex;
+
+        //Check if its local player
+        if(photonView.IsMine)
+        {
+            //Send the local item over the network
+            Hashtable hash = new Hashtable();
+            hash.Add("itemIndex", itemIndex);
+            PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+        }
+    }
+
+    //Called when information is recieved.
+    public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
+    {
+        //Synced if its not the local player
+        if(!photonView.IsMine && targetPlayer == photonView.Owner)
+        {
+            EquipItem((int)changedProps["itemIndex"]);
+        }
+    }
+
+
+
+
+
+    //HER SLUTTER NICOLAJS VÅBENDEL
+
 }
