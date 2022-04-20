@@ -45,8 +45,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
     int itemIndex;
     int previousItemIndex = -1;
 
-
-
+    public Transform Gun;
+    Vector2 direction;
 
     //HER SLUTTER NICOLAJS VÅBENDEL
 
@@ -104,9 +104,20 @@ public class PlayerController : MonoBehaviourPunCallbacks
             }
         }
 
+        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        direction = mousePos - (Vector2)Gun.position;
+        FaceMouse();
 
-        //SLUT NICOLAJS VÅBEN DEL
+       
+        }
+
+    void FaceMouse()
+    {
+        Gun.transform.right = direction;
     }
+
+    //SLUT NICOLAJS VÅBEN DEL
+
 
     private void FixedUpdate()
     {
@@ -212,18 +223,19 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     //NICOLAJ LAVER VÅBEN DEL HERUNDER
 
-  void EquipItem(int _index)
+    void EquipItem(int _index)
     {
-        if(_index == previousItemIndex)
+        if (_index == previousItemIndex)
         {
             return;
         }
-        itemIndex =_index;
+        itemIndex = _index;
 
         Debug.Log("Equiped " + itemIndex);
         items[itemIndex].itemGameObject.SetActive(true);
 
-        if(previousItemIndex != -1)
+
+        if (previousItemIndex != -1)
         {
             items[previousItemIndex].itemGameObject.SetActive(false);
         }
@@ -231,14 +243,17 @@ public class PlayerController : MonoBehaviourPunCallbacks
         previousItemIndex = itemIndex;
 
         //Check if its local player
-        if(photonView.IsMine)
+        if (photonView.IsMine)
         {
             //Send the local item over the network
             Hashtable hash = new Hashtable();
-            hash.Add("itemIndex", itemIndex);
+            hash.Add("itemIndex", itemIndex); ;
             PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
         }
     }
+
+       
+     
 
     //Called when information is recieved.
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
@@ -246,7 +261,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
         //Synced if its not the local player
         if(!photonView.IsMine && targetPlayer == photonView.Owner)
         {
-            EquipItem((int)changedProps["itemIndex"]);
+            EquipItem((int)changedProps["itemIndex"]);   
         }
     }
 
