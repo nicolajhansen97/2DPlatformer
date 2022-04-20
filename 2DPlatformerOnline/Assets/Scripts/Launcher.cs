@@ -201,7 +201,7 @@ namespace Com.MyCompany.MyGame
 
         public void StartGame()
         {
-            PhotonNetwork.LoadLevel(2);
+            PhotonNetwork.LoadLevel(1);
         }
     }
 }

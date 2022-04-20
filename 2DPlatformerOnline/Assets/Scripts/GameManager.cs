@@ -16,13 +16,13 @@ namespace Com.MyCompany.MyGame
     {
         #region Public Fields
 
-  
+
 
         [Tooltip("The prefab to use for representing the player")]
         public GameObject playerPrefab;
 
 
-       
+
         #endregion
         void Start()
         {
@@ -32,29 +32,6 @@ namespace Com.MyCompany.MyGame
             {
                 CreateController();
             }
-
-
-            /*
-            if (playerPrefab == null)
-            {
-                Debug.LogError("<Color=Red><a>Missing</a></Color> playerPrefab Reference. Please set it up in GameObject 'Game Manager'", this);
-            }
-            else
-            {
-                if (PlayerController.LocalPlayerInstance == null)
-                {
-                    Debug.LogFormat("We are Instantiating LocalPlayer from {0}", Application.loadedLevelName);
-                    // we're in a room. spawn a character for the local player. it gets synced by using PhotonNetwork.Instantiate
-
-                    
-                }
-                else
-                {
-                    Debug.LogFormat("Ignoring scene load for {0}", SceneManagerHelper.ActiveSceneName);
-                }
-            
-        }
-          */
         }
 
         void CreateController()
@@ -71,9 +48,9 @@ namespace Com.MyCompany.MyGame
         /// <summary>
         /// Called when the local player left the room. We need to load the launcher scene.
         /// </summary>
-       
 
 
+        /*
         public override void OnPlayerEnteredRoom(Player other)
         {
             Debug.LogFormat("OnPlayerEnteredRoom() {0}", other.NickName); // not seen if you're the player connecting
@@ -123,7 +100,7 @@ namespace Com.MyCompany.MyGame
             Debug.LogFormat("PhotonNetwork : Loading Level : 3");
             PhotonNetwork.LoadLevel("Room for 3");
         }
-
+        */
 
         #endregion
     }
